@@ -15,7 +15,12 @@ export default function ChatPage() {
     deleteConversation,
   } = useConversations();
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="min-vh-100 d-flex justify-content-center align-items-center">
+        <div className="spinner-border" />
+      </div>
+    );
 
   return (
     <>
@@ -26,25 +31,43 @@ export default function ChatPage() {
         </button>
       </nav>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <div
+        className="container-fluid bg-light"
+        style={{ height: "calc(100vh - 56px)" }}
+      >
+        {error && (
+          <div className="alert alert-danger py-2 mt-3 mb-0">{error}</div>
+        )}
 
-      <div style={{ display: "flex", gap: 20, padding: 16 }}>
-        <div style={{ width: 300 }}>
-          <ConversationList
-            conversations={conversations}
-            activeSessionId={activeSessionId}
-            onSelect={selectConversation}
-            onCreate={createConversation}
-            onDelete={deleteConversation}
-          />
-        </div>
+        <div className="row h-100 py-3 g-3">
+          <div className="col-md-4 col-lg-3 h-100" style={{ minHeight: 0 }}>
+            <ConversationList
+              conversations={conversations}
+              activeSessionId={activeSessionId}
+              onSelect={selectConversation}
+              onCreate={createConversation}
+              onDelete={deleteConversation}
+            />
+          </div>
 
-        <div style={{ flex: 1 }}>
-          {activeConversation ? (
-            <h4>{activeConversation.title}</h4>
-          ) : (
-            <p>Select or create a conversation</p>
-          )}
+          <div className="col-md-8 col-lg-9 h-100" style={{ minHeight: 0 }}>
+            <div className="card shadow-sm h-100">
+              {activeConversation ? (
+                <>
+                  <div className="card-header bg-white">
+                    <h5 className="mb-0">{activeConversation.title}</h5>
+                  </div>
+                  <div className="card-body overflow-auto">
+                    {/* messages, files, invoice items go here later */}
+                  </div>
+                </>
+              ) : (
+                <div className="card-body d-flex align-items-center justify-content-center text-muted">
+                  Select or create a conversation
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </>
