@@ -4,7 +4,7 @@ import { TokenStorage } from "../../tools/tokenStorage";
 export const AuthService = {
     async login(username:string, password:string){
         const req_body = new URLSearchParams({username,password});
-        const res = await fetch(`${SERVER_URL}auth/token`, { method:"POST", req_body});
+        const res = await fetch(`${SERVER_URL}auth/token`, { method:"POST", body: req_body});
         if(!res.ok) {
             throw new Error("Somthing went wrong when login!");
         }
