@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProtectedRules from "./moduls/auth/ProtectedRules";
+import UsersPage from "./pages/UsersPage";
 
 export const appRouter = createBrowserRouter([
     {path: "/login", element: <LoginPage />},
@@ -9,7 +10,7 @@ export const appRouter = createBrowserRouter([
     {
         element: <ProtectedRules />,
         children: [
-            {path: "/test", element: <RegisterPage />},
+            {path: "/profile", element: <UsersPage />},
         ]
     },
     {path: "*", element: <Navigate to="/" replace /> },
