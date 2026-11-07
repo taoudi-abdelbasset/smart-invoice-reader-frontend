@@ -1,6 +1,8 @@
 import { useAuth } from "../moduls/auth/AuthContext";
 import ConversationList from "../moduls/conversations/ConversationList";
 import { useConversations } from "../moduls/conversations/useConversations";
+import ChatWindow from "../moduls/messages/ChatWindow";
+import { useMessages } from "../moduls/messages/useMessages";
 
 export default function ChatPage() {
   const { logout } = useAuth();
@@ -14,6 +16,14 @@ export default function ChatPage() {
     createConversation,
     deleteConversation,
   } = useConversations();
+
+  const {
+    messages,
+    loading: messagesLoading,
+    sending,
+    error: messagesError,
+    sendMessage,
+  } = useMessages(activeSessionId);
 
   if (loading)
     return (
@@ -35,8 +45,10 @@ export default function ChatPage() {
         className="container-fluid bg-light"
         style={{ height: "calc(100vh - 56px)" }}
       >
-        {error && (
-          <div className="alert alert-danger py-2 mt-3 mb-0">{error}</div>
+        {(error || messagesError) && (
+          <div className="alert alert-danger py-2 mt-3 mb-0">
+            {error || messagesError}
+          </div>
         )}
 
         <div className="row h-100 py-3 g-3">
@@ -57,8 +69,19 @@ export default function ChatPage() {
                   <div className="card-header bg-white">
                     <h5 className="mb-0">{activeConversation.title}</h5>
                   </div>
-                  <div className="card-body overflow-auto">
-                    {/* messages, files, invoice items go here later */}
+                  <div
+                    className="card-body d-flex flex-column"
+                    style={{ minHeight: 0 }}
+                  >
+                    {messagesLoading ? (
+                      <div className="m-auto spinner-border" />
+                    ) : (
+                      <ChatWindow
+                        messages={messages}
+                        sending={sending}
+                        onSend={sendMessage}
+                      />
+                    )}
                   </div>
                 </>
               ) : (
