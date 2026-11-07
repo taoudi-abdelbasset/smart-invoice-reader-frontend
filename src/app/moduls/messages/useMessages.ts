@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { messageService } from "./messageService";
 import type { Message } from "./types";
 
@@ -28,13 +28,18 @@ export function useMessages(sessionId: string | null) {
     };
   }, [sessionId]);
 
+  const reload = useCallback(async () => {
+    if (!sessionId) return;
+    setMessages(await messageService.list(sessionId));
+  }, [sessionId]);
+
   const sendMessage = async (content: string) => {
     if (!sessionId) return;
     setSending(true);
     setError("");
     try {
       await messageService.send(sessionId, content);
-      setMessages(await messageService.list(sessionId));
+      await reload();
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -42,5 +47,5 @@ export function useMessages(sessionId: string | null) {
     }
   };
 
-  return { messages, loading, sending, error, sendMessage };
+  return { messages, loading, sending, error, sendMessage, reload };
 }

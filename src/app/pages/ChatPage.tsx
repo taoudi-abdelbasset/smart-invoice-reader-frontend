@@ -3,6 +3,8 @@ import ConversationList from "../moduls/conversations/ConversationList";
 import { useConversations } from "../moduls/conversations/useConversations";
 import ChatWindow from "../moduls/messages/ChatWindow";
 import { useMessages } from "../moduls/messages/useMessages";
+import FileUpload from "../moduls/files/FileUpload";
+import { fileService } from "../moduls/files/fileService";
 
 export default function ChatPage() {
   const { logout } = useAuth();
@@ -23,7 +25,14 @@ export default function ChatPage() {
     sending,
     error: messagesError,
     sendMessage,
+    reload: reloadMessages,
   } = useMessages(activeSessionId);
+
+  async function handleUpload(file: File) {
+    if (!activeSessionId) return;
+    await fileService.upload(activeSessionId, file);
+    await reloadMessages();
+  }
 
   if (loading)
     return (
@@ -80,6 +89,7 @@ export default function ChatPage() {
                         messages={messages}
                         sending={sending}
                         onSend={sendMessage}
+                        onUpload={handleUpload}
                       />
                     )}
                   </div>

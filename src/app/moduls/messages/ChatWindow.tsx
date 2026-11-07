@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import ReactMarkdown from "react-markdown";
 import type { Message } from "./types";
+import FileUpload from "../files/FileUpload";
 
 type Props = {
   messages: Message[];
   sending: boolean;
   onSend: (content: string) => Promise<void>;
+  onUpload: (file: File) => Promise<void>;
 };
 
 function parseError(content: string): string | null {
@@ -25,7 +27,12 @@ function formatTime(iso: string) {
   });
 }
 
-export default function ChatWindow({ messages, sending, onSend }: Props) {
+export default function ChatWindow({
+  messages,
+  sending,
+  onSend,
+  onUpload,
+}: Props) {
   const [text, setText] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -135,6 +142,7 @@ export default function ChatWindow({ messages, sending, onSend }: Props) {
       </div>
 
       <form className="d-flex gap-2" onSubmit={handleSubmit}>
+        <FileUpload onUpload={onUpload} />
         <input
           className="form-control"
           value={text}
