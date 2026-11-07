@@ -1,11 +1,16 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useState, type ReactNode } from "react"
 import { TokenStorage } from "../../tools/tokenStorage";
 import { AuthService } from "./AuthService";
 
+type AuthContextType = {
+  isAuth: boolean;
+  login: (username: string, password: string) => Promise<void>;
+  logout: () => void;
+};
 
-const AuthContext = createContext(null);
+const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = ({children}: {children:ReactNode}) => {
     const [isAuth, setIsAuth] = useState(!!TokenStorage.get())
 
     const login = async (username:string , password:string) => {
@@ -28,4 +33,8 @@ export const AuthProvider = ({children}) => {
 
 }
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used inside <AuthProvider>");
+  return ctx;
+};
