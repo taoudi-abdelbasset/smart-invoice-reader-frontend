@@ -3,6 +3,7 @@ import { useAuth } from "../moduls/auth/AuthContext";
 import { useUsers } from "../moduls/users/useUsers";
 import UserForm from "../moduls/users/UserForm";
 import type { UserInput } from "../moduls/users/types";
+import Navbar from "../components/Navbar";
 
 export default function UsersPage() {
   const { logout } = useAuth();
@@ -31,12 +32,7 @@ export default function UsersPage() {
 
   return (
     <>
-      <nav className="navbar navbar-dark bg-dark px-3">
-        <span className="navbar-brand mb-0 h1">Smart Invoice Reader</span>
-        <button className="btn btn-outline-light btn-sm" onClick={logout}>
-          Logout
-        </button>
-      </nav>
+      <Navbar />
 
       <div className="container py-5" style={{ maxWidth: 450 }}>
         <div className="card shadow-sm">

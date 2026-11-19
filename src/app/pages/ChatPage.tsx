@@ -6,6 +6,7 @@ import { useMessages } from "../moduls/messages/useMessages";
 import { fileService } from "../moduls/files/fileService";
 import { useInvoices } from "../moduls/invoices/useInvoices";
 import InvoiceTable from "../moduls/invoices/InvoiceTable";
+import Navbar from "../components/Navbar";
 
 export default function ChatPage() {
   const { logout } = useAuth();
@@ -57,12 +58,7 @@ export default function ChatPage() {
 
   return (
     <>
-      <nav className="navbar navbar-dark bg-dark px-3">
-        <span className="navbar-brand mb-0 h1">Smart Invoice Reader</span>
-        <button className="btn btn-outline-light btn-sm" onClick={logout}>
-          Logout
-        </button>
-      </nav>
+      <Navbar />
 
       <div
         className="container-fluid bg-light"
